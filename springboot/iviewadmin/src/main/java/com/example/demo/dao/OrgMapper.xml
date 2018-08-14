@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.OrgMapper">
+
+	<!--resultMap对应的是表与实体类的映射 - type 数据库表对应的实体类，别名或完整类名都可以 -->
+	<resultMap id="BaseResultMap"
+		type="com.example.demo.bean.Organization">
+		<!-- 结果集的主键 -->
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<!-- 普通的列 -column 是数据库中字段， property是实体类中字段 -->
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="INTEGER" />
+		<result column="isParent" property="isParent"
+			jdbcType="INTEGER" />
+		<result column="path" property="path" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="manager" property="manager" jdbcType="VARCHAR" />
+		<result column="description" property="description"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!--parameterType(输入类型)、resultType(输出类型) -->
+	<select id="findOrgsByPid" parameterType="Integer"
+		resultMap="BaseResultMap"
+		resultType="com.example.demo.bean.Organization">
+		select * from org where pid = #{pid}
+	</select>
+	<!--查找所有组织的名字和id-->
+	<select id="findOrgsInfo" 
+		resultMap="BaseResultMap"
+		resultType="com.example.demo.bean.Organization">
+		select * from org
+	</select>
+
+	<insert id="addOrg" useGeneratedKeys="true"
+		parameterType="com.example.demo.bean.Organization">
+		insert into org(title, pid, isParent, path, status, type, manager,
+		description)
+		values(#{org.title}, #{org.pid}, #{org.isParent}, #{org.path}, #{org.status}, #{org.type},
+		#{org.manager}, #{org.description})
+	</insert>
+
+	<update id="updateOrg" parameterType="com.example.demo.bean.Organization">
+		update org set title = #{org.title}, pid = #{org.pid}, isParent = #{org.isParent}, path = #{org.path}, status = #{org.status}, type = #{org.type},
+		manager = #{org.manager}, description = #{org.description}
+		where id = #{org.id};
+	</update>
+	
+   <delete id="deleteOrg" parameterType="Integer">
+           delete from org where id = #{id};
+   </delete>
+   
+   <update id="setIsParent" parameterType="Integer">
+		update org set isParent = 1
+		where id = #{id};
+	</update>
+
+</mapper>

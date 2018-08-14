@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.StaffMapper">
+
+	<!--resultMap对应的是表与实体类的映射 - type 数据库表对应的实体类，别名或完整类名都可以 -->
+	<resultMap id="BaseResultMap"
+		type="com.example.demo.bean.Staff">
+		<!-- 结果集的主键 -->
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<!-- 普通的列 -column 是数据库中字段， property是实体类中字段 -->
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="orgId" property="orgId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<!--parameterType(输入类型)、resultType(输出类型) -->
+	<select id="findAllStaffs" 
+		resultMap="BaseResultMap"
+		resultType="com.example.demo.bean.Staff">
+		select * from staff
+	</select>
+	
+	<select id="findStaffById" 
+		resultMap="BaseResultMap"
+		resultType="com.example.demo.bean.Staff">
+		select * from staff
+		where id = #{id}
+	</select>
+	<!--分配orgId-->
+	<update id="updateOrgId" parameterType="com.example.demo.bean.Staff">
+		update staff set orgId = #{staff.orgId}
+		where id = #{staff.id};
+	</update>
+	<!--根据orgId搜索-->
+	<select id="findStaffsByOrgId" 
+		resultMap="BaseResultMap"
+		resultType="com.example.demo.bean.Staff">
+		select * from staff 
+		where orgId = #{id}
+	</select>
+	<!--根据姓名搜索-->
+	<select id="findStaffByName" 
+		resultMap="BaseResultMap"
+		resultType="com.example.demo.bean.Staff">
+		select * from staff 
+		where name = #{name}
+	</select>
+
+</mapper>
