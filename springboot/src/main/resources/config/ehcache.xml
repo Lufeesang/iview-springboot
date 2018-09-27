@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         updateCheck="false">
+    <diskStore path="java.io.tmpdir/Tmp_EhCache"/>
+    <defaultCache eternal="false" maxElementsInMemory="1000"
+                  overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+                  timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU"/>
+    <cache name="user" eternal="false" maxElementsInMemory="10000"
+           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+           timeToLiveSeconds="0" memoryStoreEvictionPolicy="LFU"/>
+    
+    
+    <!--用于作为验证中心的缓存，缓存code，以及accessToken，设置有效期限为5分钟
+		并且code，使用过后，立即失效-->
+    <cache name="code-cache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="1"
+           timeToLiveSeconds="300"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    <!-- menu 对应的缓存管理区 -->
+    <cache name="menu-cache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    <!--日志缓存管理区域-->
+    <cache name="log-cache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    <!--多条件查询结果缓存管理区域-->
+    <cache name="LimitSearch-cache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    <!--User缓存管理区域-->
+    <cache name="user-cache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    <cache name="role-cache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    <!--多条件查询结果缓存管理区域-->
+    <cache name="user-menu-cache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    <cache name="role-menu-cache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+</ehcache>

@@ -1,0 +1,569 @@
+﻿[
+  {
+    "name": "大二",
+    "url": "",
+    "perms": "",
+    "menu_id": 105,
+    "parent_id": 104,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦",
+    "url": "",
+    "perms": "",
+    "menu_id": 104,
+    "parent_id": 1,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "待办任务",
+    "url": "activiti/task/todo",
+    "perms": "",
+    "menu_id": 101,
+    "parent_id": 93,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "所有权限",
+    "url": "",
+    "perms": "act:process",
+    "menu_id": 99,
+    "parent_id": 96,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "百度chart",
+    "url": "/chart/graph_echarts.html",
+    "perms": "",
+    "menu_id": 98,
+    "parent_id": 97,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "图表管理",
+    "url": "",
+    "perms": "",
+    "menu_id": 97,
+    "parent_id": 0,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "流程管理",
+    "url": "activiti/process",
+    "perms": "",
+    "menu_id": 96,
+    "parent_id": 93,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "全部权限",
+    "url": "",
+    "perms": "activiti:model",
+    "menu_id": 95,
+    "parent_id": 94,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "模型管理",
+    "url": "activiti/model",
+    "perms": "",
+    "menu_id": 94,
+    "parent_id": 93,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "工作流程",
+    "url": "",
+    "perms": "",
+    "menu_id": 93,
+    "parent_id": 0,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "在线用户",
+    "url": "sys/online",
+    "perms": "",
+    "menu_id": 92,
+    "parent_id": 91,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "系统监控",
+    "url": "",
+    "perms": "",
+    "menu_id": 91,
+    "parent_id": 0,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "我的通知",
+    "url": "oa/notify/selfNotify",
+    "perms": "",
+    "menu_id": 90,
+    "parent_id": 84,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "批量删除",
+    "url": "oa/notify/batchRemove",
+    "perms": "oa:notify:batchRemove",
+    "menu_id": 89,
+    "parent_id": 85,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "删除",
+    "url": "oa/notify/remove",
+    "perms": "oa:notify:remove",
+    "menu_id": 88,
+    "parent_id": 85,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "编辑",
+    "url": "oa/notify/edit",
+    "perms": "oa:notify:edit",
+    "menu_id": 87,
+    "parent_id": 85,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "新增",
+    "url": "oa/notify/add",
+    "perms": "oa:notify:add",
+    "menu_id": 86,
+    "parent_id": 85,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "通知公告",
+    "url": "oa/notify",
+    "perms": "oa:notify:notify",
+    "menu_id": 85,
+    "parent_id": 84,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "办公管理",
+    "url": "",
+    "perms": "",
+    "menu_id": 84,
+    "parent_id": 0,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "批量删除",
+    "url": "/common/dict/batchRemove",
+    "perms": "common:dict:batchRemove",
+    "menu_id": 83,
+    "parent_id": 78,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "删除",
+    "url": "/common/dict/remove",
+    "perms": "common:dict:remove",
+    "menu_id": 81,
+    "parent_id": 78,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "编辑",
+    "url": "/common/dict/edit",
+    "perms": "common:dict:edit",
+    "menu_id": 80,
+    "parent_id": 78,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "增加",
+    "url": "/common/dict/add",
+    "perms": "common:dict:add",
+    "menu_id": 79,
+    "parent_id": 78,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "数据字典",
+    "url": "/common/dict",
+    "perms": "common:dict:dict",
+    "menu_id": 78,
+    "parent_id": 1,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "系统工具",
+    "url": "",
+    "perms": "",
+    "menu_id": 77,
+    "parent_id": 0,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "编辑",
+    "url": "/system/sysDept/edit",
+    "perms": "system:sysDept:edit",
+    "menu_id": 76,
+    "parent_id": 73,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "刪除",
+    "url": "system/sysDept/remove",
+    "perms": "system:sysDept:remove",
+    "menu_id": 75,
+    "parent_id": 73,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "增加",
+    "url": "/system/sysDept/add",
+    "perms": "system:sysDept:add",
+    "menu_id": 74,
+    "parent_id": 73,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "部门管理",
+    "url": "/system/sysDept",
+    "perms": "system:sysDept:sysDept",
+    "menu_id": 73,
+    "parent_id": 3,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "计划任务",
+    "url": "common/job",
+    "perms": "common:taskScheduleJob",
+    "menu_id": 72,
+    "parent_id": 77,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "文件管理",
+    "url": "/common/sysFile",
+    "perms": "common:sysFile:sysFile",
+    "menu_id": 71,
+    "parent_id": 1,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "发布文章",
+    "url": "/blog/bContent/add",
+    "perms": "blog:bContent:add",
+    "menu_id": 68,
+    "parent_id": 49,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "批量删除",
+    "url": "",
+    "perms": "sys:role:batchRemove",
+    "menu_id": 62,
+    "parent_id": 7,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "批量删除",
+    "url": "",
+    "perms": "sys:menu:batchRemove",
+    "menu_id": 61,
+    "parent_id": 2,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "批量删除",
+    "url": "",
+    "perms": "blog:bContent:batchRemove",
+    "menu_id": 60,
+    "parent_id": 50,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "删除",
+    "url": "",
+    "perms": "blog:bContent:remove",
+    "menu_id": 59,
+    "parent_id": 50,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "编辑",
+    "url": "",
+    "perms": "blog:bContent:edit",
+    "menu_id": 58,
+    "parent_id": 50,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "运行监控",
+    "url": "/druid/index.html",
+    "perms": "",
+    "menu_id": 57,
+    "parent_id": 91,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "删除",
+    "url": "",
+    "perms": "sys:role:remove",
+    "menu_id": 56,
+    "parent_id": 7,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "编辑",
+    "url": "",
+    "perms": "sys:role:edit",
+    "menu_id": 55,
+    "parent_id": 7,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "新增",
+    "url": "",
+    "perms": "blog:bContent:add",
+    "menu_id": 51,
+    "parent_id": 50,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "文章列表",
+    "url": "blog/bContent",
+    "perms": "blog:bContent:bContent",
+    "menu_id": 50,
+    "parent_id": 49,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "博客管理",
+    "url": "",
+    "perms": "",
+    "menu_id": 49,
+    "parent_id": 0,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "代码生成",
+    "url": "common/generator",
+    "perms": "common:generator",
+    "menu_id": 48,
+    "parent_id": 77,
+    "gmt_create": null,
+    "gmt_modified": null
+  },
+  {
+    "name": "清空",
+    "url": null,
+    "perms": "sys:log:clear",
+    "menu_id": 30,
+    "parent_id": 27,
+    "gmt_create": "2017-08-14 22:31:02",
+    "gmt_modified": null
+  },
+  {
+    "name": "删除",
+    "url": null,
+    "perms": "sys:log:remove",
+    "menu_id": 29,
+    "parent_id": 27,
+    "gmt_create": "2017-08-14 22:30:43",
+    "gmt_modified": null
+  },
+  {
+    "name": "刷新",
+    "url": null,
+    "perms": "sys:log:list",
+    "menu_id": 28,
+    "parent_id": 27,
+    "gmt_create": "2017-08-14 22:30:22",
+    "gmt_modified": null
+  },
+  {
+    "name": "系统日志",
+    "url": "common/log",
+    "perms": "common:log",
+    "menu_id": 27,
+    "parent_id": 91,
+    "gmt_create": "2017-08-14 22:11:53",
+    "gmt_modified": null
+  },
+  {
+    "name": "重置密码",
+    "url": "",
+    "perms": "sys:user:resetPwd",
+    "menu_id": 26,
+    "parent_id": 6,
+    "gmt_create": "2017-08-14 17:28:34",
+    "gmt_modified": null
+  },
+  {
+    "name": "停用",
+    "url": null,
+    "perms": "sys:user:disable",
+    "menu_id": 25,
+    "parent_id": 6,
+    "gmt_create": "2017-08-14 17:27:43",
+    "gmt_modified": null
+  },
+  {
+    "name": "批量删除",
+    "url": "",
+    "perms": "sys:user:batchRemove",
+    "menu_id": 24,
+    "parent_id": 6,
+    "gmt_create": "2017-08-14 17:27:18",
+    "gmt_modified": null
+  },
+  {
+    "name": "删除",
+    "url": "",
+    "perms": "sys:menu:remove",
+    "menu_id": 22,
+    "parent_id": 2,
+    "gmt_create": "2017-08-14 11:00:26",
+    "gmt_modified": null
+  },
+  {
+    "name": "编辑",
+    "url": "",
+    "perms": "sys:menu:edit",
+    "menu_id": 21,
+    "parent_id": 2,
+    "gmt_create": "2017-08-14 10:59:56",
+    "gmt_modified": null
+  },
+  {
+    "name": "新增",
+    "url": "",
+    "perms": "sys:menu:add",
+    "menu_id": 20,
+    "parent_id": 2,
+    "gmt_create": "2017-08-14 10:59:32",
+    "gmt_modified": null
+  },
+  {
+    "name": "新增",
+    "url": "",
+    "perms": "sys:role:add",
+    "menu_id": 15,
+    "parent_id": 7,
+    "gmt_create": "2017-08-14 10:56:37",
+    "gmt_modified": null
+  },
+  {
+    "name": "删除",
+    "url": null,
+    "perms": "sys:user:remove",
+    "menu_id": 14,
+    "parent_id": 6,
+    "gmt_create": "2017-08-14 10:52:24",
+    "gmt_modified": null
+  },
+  {
+    "name": "编辑",
+    "url": "",
+    "perms": "sys:user:edit",
+    "menu_id": 13,
+    "parent_id": 6,
+    "gmt_create": "2017-08-14 10:52:06",
+    "gmt_modified": null
+  },
+  {
+    "name": "新增",
+    "url": "",
+    "perms": "sys:user:add",
+    "menu_id": 12,
+    "parent_id": 6,
+    "gmt_create": "2017-08-14 10:51:35",
+    "gmt_modified": null
+  },
+  {
+    "name": "角色管理",
+    "url": "sys/role",
+    "perms": "sys:role:role",
+    "menu_id": 7,
+    "parent_id": 3,
+    "gmt_create": "2017-08-10 14:13:19",
+    "gmt_modified": null
+  },
+  {
+    "name": "用户管理",
+    "url": "sys/user/",
+    "perms": "sys:user:user",
+    "menu_id": 6,
+    "parent_id": 3,
+    "gmt_create": "2017-08-10 14:12:11",
+    "gmt_modified": null
+  },
+  {
+    "name": "系统管理",
+    "url": null,
+    "perms": null,
+    "menu_id": 3,
+    "parent_id": 0,
+    "gmt_create": "2017-08-09 23:06:55",
+    "gmt_modified": "2017-08-14 14:13:43"
+  },
+  {
+    "name": "系统菜单",
+    "url": "sys/menu/",
+    "perms": "sys:menu:menu",
+    "menu_id": 2,
+    "parent_id": 3,
+    "gmt_create": "2017-08-09 22:55:15",
+    "gmt_modified": null
+  },
+  {
+    "name": "基础管理",
+    "url": "",
+    "perms": "",
+    "menu_id": 1,
+    "parent_id": 0,
+    "gmt_create": "2017-08-09 22:49:47",
+    "gmt_modified": null
+  }
+]

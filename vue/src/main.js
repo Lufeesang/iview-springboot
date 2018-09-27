@@ -7,11 +7,12 @@ import store from './store'
 import iView from 'iview'
 import i18n from '@/locale'
 import config from '@/config'
-import importDirective from '@/directive'
+// import importDirective from '@/directive'
+import axios from './config/axios'
 import 'iview/dist/styles/iview.css'
 import './index.less'
 import '@/assets/icons/iconfont.css'
-import axios from 'axios'
+import VueResource from 'vue-resource'
 // import '@/mock'
 // 实际打包时应该不引入mock
 import env from '../config/env'
@@ -19,11 +20,9 @@ import env from '../config/env'
 // env === 'development' ? require('@/mock') : ''
 env === 'development' ? '' : ''
 
-/*全局配置axios*/
-var Axios = axios.create({
-  baseURL: 'http://localhost:8083',
-}); 
-Vue.prototype.$axios = Axios;
+Vue.prototype.$axios = axios
+
+Vue.use(VueResource)
 
 Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)
@@ -36,7 +35,7 @@ Vue.prototype.$config = config
 /**
  * 注册指令
  */
-importDirective(Vue)
+// importDirective(Vue)
 
 /* eslint-disable no-new */
 new Vue({

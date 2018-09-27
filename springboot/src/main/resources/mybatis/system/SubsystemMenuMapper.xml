@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.system.dao.SubsystemMenuDAO">
+
+	<select id="get" resultType="com.bootdo.system.domain.SubsystemMenuDO">
+		SELECT `id`,`subsystem_id`,`menu_id`
+		FROM sys_subsystem_menu 
+		WHERE id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.system.domain.SubsystemMenuDO">
+		SELECT `id`,`subsystem_id`,`menu_id`
+		FROM sys_subsystem_menu
+		<where>
+			<if test="id != null and id != ''"> and id = #{id} </if>
+			<if test="subsystemId != null and subsystemId != ''"> and subsystem_id = #{subsystemId} </if>
+			<if test="menuId != null and menuId != ''"> and menu_id = #{menuId} </if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				ORDER BY ${sort} ${order}
+			</when>
+			<otherwise>
+				ORDER BY id DESC
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="count" resultType="int">
+		SELECT count(*) 
+		FROM sys_subsystem_menu
+		<where>
+			<if test="id != null and id != ''"> and id = #{id} </if>
+			<if test="subsystemId != null and subsystemId != ''"> and subsystem_id = #{subsystemId} </if>
+			<if test="menuId != null and menuId != ''"> and menu_id = #{menuId} </if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.bootdo.system.domain.SubsystemMenuDO"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sys_subsystem_menu
+		(
+		`subsystem_id`,
+		`menu_id`
+		)
+		VALUES
+		(
+		#{subsystemId},
+		#{menuId}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.bootdo.system.domain.SubsystemMenuDO">
+		UPDATE sys_subsystem_menu
+		<set>
+			<if test="subsystemId != null">`subsystem_id` = #{subsystemId}</if>
+			<if test="menuId != null">`menu_id` = #{menuId}</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<delete id="remove">
+		DELETE FROM sys_subsystem_menu 
+		WHERE id = #{value}
+	</delete>
+
+	<delete id="batchRemove">
+		DELETE FROM sys_subsystem_menu 
+		WHERE id IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

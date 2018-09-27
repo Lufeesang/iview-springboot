@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.system.dao.SubsystemDAO">
+
+	<select id="get" resultType="com.bootdo.system.domain.SubsystemDO">
+		SELECT `id`,`sys_identification`,`index_url`, host, port
+		FROM sys_subsystem 
+		WHERE id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.system.domain.SubsystemDO">
+		SELECT `id`,`sys_identification`,`index_url`, host, port
+		FROM sys_subsystem
+		<where>
+			<if test="id != null and id != ''"> and id = #{id} </if>
+			<if test="sysIdentification != null and sysIdentification != ''"> and sys_identification = #{sysIdentification} </if>
+			<if test="indexUrl != null and indexUrl != ''"> and index_url = #{indexUrl} </if>
+			<if test="host != null and host != ''"> and host = #{host} </if>
+			<if test="port != null and port != ''"> and port = #{port} </if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				ORDER BY ${sort} ${order}
+			</when>
+			<otherwise>
+				ORDER BY id DESC
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			LIMIT #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="count" resultType="int">
+		SELECT count(*) 
+		FROM sys_subsystem
+		<where>
+			<if test="id != null and id != ''"> and id = #{id} </if>
+			<if test="sysIdentification != null and sysIdentification != ''"> and sys_identification = #{sysIdentification} </if>
+			<if test="indexUrl != null and indexUrl != ''"> and index_url = #{indexUrl} </if>
+			<if test="host != null and host != ''"> and host = #{host} </if>
+			<if test="port != null and port != ''"> and port = #{port} </if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.bootdo.system.domain.SubsystemDO"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sys_subsystem
+		(
+		`sys_identification`,
+		`index_url`,
+		host,
+		port
+		)
+		VALUES
+		(
+		#{sysIdentification},
+		#{indexUrl},
+		#{host},
+		#{port}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.bootdo.system.domain.SubsystemDO">
+		UPDATE sys_subsystem
+		<set>
+			<if test="sysIdentification != null">`sys_identification` = #{sysIdentification}</if>
+			<if test="indexUrl != null">`index_url` = #{indexUrl}</if>
+			<if test="host != null"> and host = #{host} </if>
+			<if test="port != null"> and port = #{port} </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<delete id="remove">
+		DELETE FROM sys_subsystem 
+		WHERE id = #{value}
+	</delete>
+
+	<delete id="batchRemove">
+		DELETE FROM sys_subsystem 
+		WHERE id IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="getByMenuId" resultType="com.bootdo.system.domain.SubsystemDO">
+		SELECT `id`,`sys_identification`,`index_url`, host, port
+		FROM sys_subsystem 
+		WHERE id in (SELECT subsystem_id
+					 FROM sys_subsystem_menu
+					 WHERE menu_id = #{menuId})
+	</select>
+	
+</mapper>

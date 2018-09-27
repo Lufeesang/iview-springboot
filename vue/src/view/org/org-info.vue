@@ -1,8 +1,8 @@
 <template>
   <div>
     <Modal v-model="modalAdd" title="新增机构" width="300" @on-ok="confirmAppend">
-      <Form>
-        <FormItem label="机构名称">
+      <Form :rules="ruleInline">
+        <FormItem prop="addOrgName" label="机构名称">
           <Input v-model="newOrgName"></Input>
         </FormItem>
       </Form>
@@ -25,7 +25,7 @@
               <Input v-model="orgInfo.name"></Input>
             </FormItem>
             <FormItem label="上级组织">
-              <Input v-model="orgInfo.parent"></Input>
+              <Input v-model="orgInfo.parent" readonly></Input>
             </FormItem>
             <FormItem label="组织机构状态">
               <Select v-model="orgInfo.status">
@@ -42,7 +42,7 @@
               <Input v-model="orgInfo.manager"></Input>
             </FormItem>
             <FormItem label="所属租户">
-              <Input v-model="orgInfo.tenament"></Input>
+              <Input v-model="orgInfo.tenament" readonly></Input>
             </FormItem>
             <FormItem label="组织机构描述" prop="desc">
               <Input v-model="orgInfo.desc" type="textarea" :autosize="{minRows: 5,maxRows: 8}" placeholder="Enter something..." size="large" :rows="5" style="width:440px"></Input>
@@ -52,10 +52,7 @@
               <Button type="primary" @click="save">保存</Button>
             </FormItem>
             <FormItem>
-              <Button type='ghost' style="color:black;" @click="reset">重置</Button>
-            </FormItem>
-            <FormItem>
-              <Button type="primary" @click="test">test</Button>
+              <Button @click="reset">重置</Button>
             </FormItem>
           </Form>
         </Card>
@@ -76,6 +73,11 @@ export default {
       modalAdd: false,
       modalDel: false,
       newOrgName: '',
+      ruleInline: {
+        addOrgName: [
+          { required: true, message: '请输入组织名称', trigger: 'blur' }
+        ],
+      },
       /*组织树区*/
       orgsData: [],
       treeData: [{
@@ -93,6 +95,7 @@ export default {
       checkIds: [],
       delTitles: [],
       delDatas: [],
+      children: [],
       /*信息显示区*/
       orgInfo: {
         name: '',
@@ -109,13 +112,15 @@ export default {
     /*组织树区*/
     // 加载机构树数据
     getOrgsByPid() {
-      return this.$axios.get("/org/tree", {
+      return this.$axios.request({
+          url: "/org/tree",
+          method: "get",
           params: {
             pid: -1
           }
         })
         .then(res => {
-          console.log(res.data)
+          console.log(res)
           return res.data
         })
         .catch(err => {
@@ -232,18 +237,6 @@ export default {
       this.checkNodes = arguments[0];
     },
 
-    // 测试
-    test() {
-      // let test = document.getElementById("3");
-      // test.style.color = "red";
-      // location.href = "#3";
-      // console.log(this.rootNode)
-      // console.log(this.rootNode[3].node)
-      // this.rootNode[3].node.expand = true 
-      // this.rootNode[3].node.selected = true 
-      // this.rootNode[3].node.checked = true
-
-    },
     // 增加节点
     append(data) {
       this.modalAdd = true;
@@ -263,13 +256,15 @@ export default {
         pid: this.nodeData.id,
         isParent: 0,
       });
-      this.$set(this.nodeData, "children", children);
-      this.emitRefresh(orginChildren)
+      this.children = children;
+      // this.emitRefresh(orginChildren)
+      this.addNode(orginChildren)
     },
     addNode(orginChildren) {
       /*设置该节点isParent为1*/
+      let _this = this;
       if (!orginChildren) {
-        this.$axios({
+        this.$axios.request({
           url: "/org/setIsParent",
           method: 'post',
           data: { id: this.nodeData.id }
@@ -280,7 +275,7 @@ export default {
         })
       }
       /*提交新节点初始数据到服务端*/
-      return this.$axios({
+      return this.$axios.request({
         url: "/org/add",
         method: 'post',
         data: {
@@ -293,39 +288,51 @@ export default {
           isParent: 0,
         }
       }).then(res => {
+        _this.$set(_this.nodeData, "children", _this.children);
+        _this.$Message.success("添加成功")
         console.log(res)
       }).catch(err => {
+        _this.$Message.error("添加失败：" + err)
         console.log(err)
       });
     },
-    addNodePromise(orginChildren) {
-      let _this = this;
-      let p = new Promise(function(resolve, reject) {
-        resolve(_this.addNode(orginChildren));
-      })
-      return p;
-    },
-    emitRefresh(orginChildren) {
-      let _this = this;
-      this.addNodePromise(orginChildren).then(function(data) {
-        _this.treeFresh();
-      })
-    },
+    /**
+     * 以下代码为原本添加节点后重新刷新树结构，因考虑友好性，不重新请求
+     * 刷新树结构
+     */
+    // addNodePromise(orginChildren) {
+    //   let _this = this;
+    //   let p = new Promise(function(resolve, reject) {
+    //     resolve(_this.addNode(orginChildren));
+    //   })
+    //   return p;
+    // },
+    // emitRefresh(orginChildren) {
+    //   let _this = this;
+    //   this.addNodePromise(orginChildren).then(function(data) {
+    //     _this.treeFresh();
+    //   })
+    // },
     // 删除节点
     delete(root, node, data) {
       this.delDatas = []
       this.delTitles = []
       this.checkIds = []
+      // 直接删除
+      if (!node.nodeKey && !this.checkNodes.length) {
+        this.$Message.error("无法删除根节点");
+        return
+      }
       // 批量删除
       if (this.checkNodes.length) {
-        if (this.checkNodes[0].nodeKey == 0) {
-          this.$Message.error("无法删除根节点");
-          return
-        }
         let checkKey,
           index,
           checkNode,
           parentNode;
+        if (this.checkNodes[0].nodeKey == 0) {
+          this.$Message.error("无法删除根节点");
+          return
+        }
         for (let item in this.checkNodes) {
           checkKey = this.checkNodes[item].nodeKey;
           checkNode = root[checkKey].node;
@@ -336,11 +343,12 @@ export default {
           this.checkIds.push(checkNode.id)
         }
       } else {
+        // 直接删除
         const parentKey = root.find(el => el === node).parent;
         const parent = root.find(el => el.nodeKey === parentKey).node;
         const index = parent.children.indexOf(data);
-        if (data.children) {
-          this.$Message.info(data.title + "还有子节点，请通过勾选来执行此操作");
+        if (data.children && data.children.length) {
+          this.$Message.error(data.title + "还有子节点，请通过多选来删除多个节点");
           return;
         }
         this.delDatas[index] = parent
@@ -350,16 +358,9 @@ export default {
       this.modalDel = true;
     },
     confirmDel() {
-      // 前端删除节点
-      for (let item in this.delDatas) {
-        if (this.delDatas[item] == this.delDatas[item - 1]) {
-          this.delDatas[item].children.splice(item - 1, 1);
-        } else {
-          this.delDatas[item].children.splice(item, 1);
-        }
-      }
+      let _this = this;
       // 提交删除数组
-      this.$axios({
+      this.$axios.request({
         url: "/org/delete",
         method: 'post',
         data: {
@@ -368,7 +369,24 @@ export default {
         dataType: 'json'
       }).then(res => {
         console.log(res)
+        _this.$Message.success("删除成功")
+        // 前端删除节点
+        for (let item in _this.delDatas) {
+          if (_this.delDatas[item] == _this.delDatas[item - 1]) {
+            _this.delDatas[item].children.splice(item - 1, 1);
+            // 若没有子节点则设置为非父节点
+            if (!_this.delDatas[item].children.length) {
+              _this.delDatas[item].isParent = 0
+            }
+          } else {
+            _this.delDatas[item].children.splice(item, 1);
+            if (!_this.delDatas[item].children.length) {
+              _this.delDatas[item].isParent = 0
+            }
+          }
+        }
       }).catch(err => {
+        _this.$Message.error("删除失败")
         console.log(err)
       });
     },
@@ -376,7 +394,8 @@ export default {
     /*信息查看和修改区*/
     // 修改信息
     update() {
-      return this.$axios({
+      let _this = this;
+      return this.$axios.request({
         url: "/org/update",
         method: 'post',
         data: {
@@ -391,8 +410,10 @@ export default {
         }
       }).then(res => {
         console.log(res)
+        _this.$Message.success("保存成功");
       }).catch(err => {
         console.log(err)
+        _this.$Message.error("保存失败");
       });
     },
     updatePromise() {
@@ -414,14 +435,19 @@ export default {
     save() {
       let _this = this;
       this.updatePromise().then(function(data) {
-        _this.loadingOrgsData();
+        // _this.treeFresh();
+        _this.nodeData.title = _this.orgInfo.name;
+        _this.nodeData.status = _this.orgInfo.status;
+        _this.nodeData.type = _this.orgInfo.type;
+        _this.nodeData.manager = _this.orgInfo.manager;
+        _this.nodeData.description = _this.orgInfo.desc;
       })
     },
     reset() {
       for (let i in this.orgInfo) {
         this.orgInfo[i] = ''
       }
-    }
+    },
   },
   mounted() {
     this.treeFresh();

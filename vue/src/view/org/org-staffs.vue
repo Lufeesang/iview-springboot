@@ -3,7 +3,9 @@
     <Row :gutter="16">
       <Col span="6">
       <Card>
-        <Tree :data="firstNode" :load-data="loadTreeData" :render="renderContent" class="layout-content-tree"></Tree>
+        <AutoComplete v-model="queryInput" style="width:200px" :data="searchOptions" @on-change="setSearchOptions" @on-select="selectOption" icon="ios-search">
+        </AutoComplete>
+        <Tree :data="treeData" @on-select-change="handleSelect"></Tree>
       </Card>
       </Col>
       <Col span="18">
@@ -13,13 +15,13 @@
           <FormItem label="账号ID" class="formNumber">
             <Input v-model="formRight.input1"></Input>
             <div>
-            <p v-show="nanId" class="formTip" >请输入数字</p>
+              <p v-show="nanId" class="formTip">请输入数字</p>
             </div>
           </FormItem>
           <FormItem label="账号区间" class="formNumber">
             <Input v-model="formRight.input2" style="width:30%"></Input> ~
             <Input v-model="formRight.input3 " style="width:30%"></Input>
-            <p v-show="nanIds" class="formTip" >请输入数字</p>
+            <p v-show="nanIds" class="formTip">请输入数字</p>
           </FormItem>
           <FormItem label="人员姓名 ">
             <Input v-model="formRight.input4 "></Input>
@@ -35,16 +37,13 @@
             </Select>
           </FormItem>
           <FormItem>
-            <Button type="primary " @click="query">查询</Button>
+            <Button type="primary" @click="query">查询</Button>
           </FormItem>
           <FormItem>
-            <Button type='ghost' style="color:black; " @click="resetCondition">重置条件</Button>
+            <Button @click="resetCondition">重置条件</Button>
           </FormItem>
           <FormItem>
-            <Button type='ghost' style="color:black; " @click="resetAll">重置所有</Button>
-          </FormItem>
-          <FormItem>
-            <Button type='ghost' style="color:black; " @click="test">test</Button>
+            <Button @click="resetAll">重置所有</Button>
           </FormItem>
         </Form>
         <Transfer :data="staffsData" :target-keys="targetKeys" :render-format="render1" :list-style="listStyle" @on-change="handleChange" :titles="transferTitle"></Transfer>
@@ -59,17 +58,28 @@ export default {
   data() {
     return {
       /*树数据*/
-      firstNode: [{
+      treeData: [{
+        id: -1,
         title: '组织机构树',
         expand: false,
         loading: false,
-        children: []
+        children: [],
+        checked: false,
       }],
       orgsInfo: [],
       orgsTree: [],
+      orgsData: [],
       titleMapId: [],
       nodeData: '',
+      // 查询数据
+      orgsName: [],
+      queryInput: '',
+      searchOptions: [],
+      findFlag: false,
+      setTrue: false,
       /*列表数据*/
+      orgStaffs: [],
+      orgStaffsKeys: [],
       staffsData: [],
       targetKeys: [],
       listStyle: {
@@ -80,13 +90,13 @@ export default {
       leftColName: {
         key: '账号ID',
         label: '人员名称',
-        orgId: 0,
+        deptId: 0,
         disabled: true
       },
       rightColName: {
         key: ' 账号ID',
         label: '人员名称',
-        orgId: 0,
+        deptId: 0,
         disabled: true
       },
       /*表单区*/
@@ -103,9 +113,45 @@ export default {
     }
   },
   methods: {
+    /*搜索框*/
+    setSearchOptions(val) {
+      this.searchOptions = val ? this.orgsName.filter((item) => item.indexOf(val) > -1) : []
+    },
+    locateTheNode(title, nodeData) {
+      if (this.nodeData && this.nodeData.selected == true) {
+        this.nodeData.selected = false
+      }
+      for (let item in nodeData) {
+        this.$set(nodeData[item], "selected", false);
+        this.$set(nodeData[item], "expand", false);
+        if (nodeData[item].title == title) {
+          this.nodeData = nodeData[item]
+          this.$set(nodeData[item], "selected", true);
+          this.findFlag = true
+          return
+        } else if (nodeData[item].children && nodeData[item].children.length) {
+          this.locateTheNode(title, nodeData[item].children)
+        }
+        if (this.findFlag) {
+          if (!nodeData[item].expand || nodeData[item].nodeKey > -1) {
+            this.$set(nodeData[item], "expand", true)
+          }
+          if (nodeData[item].nodeKey == 0) {
+            this.findFlag = false
+          }
+          return
+        }
+      }
+    },
+    selectOption(val) {
+      this.locateTheNode(val, this.treeData)
+    },
     /*组织机构数据*/
     getOrgsInfo() {
-      return this.$axios.get("/org/info")
+      return this.$axios.request({
+          url: "/org/info",
+          method: "get",
+        })
         .then(res => {
           console.log(res)
           return res.data
@@ -144,6 +190,7 @@ export default {
           key = _this.orgsInfo[item].title;
           value = _this.orgsInfo[item].id;
           _this.titleMapId[item][key] = value;
+          _this.orgsName.push(key);
         }
         _this.titleMapId.unshift({ '组织机构树': -1 })
       })
@@ -155,30 +202,33 @@ export default {
       })
       return p;
     },
-    getOrgsTree() {
-      return this.$axios.get("/org/tree", {
+    getOrgsByPid() {
+      return this.$axios.request({
+          url: "/org/tree",
+          method: "get",
           params: {
             pid: -1
           }
         })
         .then(res => {
+          console.log(res)
           return res.data
         })
         .catch(err => {
           console.log(err)
         })
     },
-    getOrgsTreePromise() {
+    getOrgsByPidPromise() {
       let _this = this;
       let p = new Promise(function(resolve, reject) {
-        resolve(_this.getOrgsTree())
+        resolve(_this.getOrgsByPid())
       });
       return p;
     },
     setOrgsData() {
       let _this = this;
-      return this.getOrgsTreePromise().then(function(data) {
-        _this.orgsTree = data;
+      return this.getOrgsByPidPromise().then(function(data) {
+        _this.orgsData = data;
       });
     },
     setOrgsDataPromise() {
@@ -188,46 +238,32 @@ export default {
       });
       return p;
     },
-    loadTreeData(item, callback) {
+    treeFresh() {
       let _this = this;
-      this.setOrgsDataPromise().then(function() {
-        callback(_this.orgsTree);
+      this.setOrgsDataPromise().then(function(data) {
+        _this.treeData[0].children = _this.orgsData
       })
     },
-    renderContent(h, { root, node, data }) {
-      return h('span', {
-        style: {
-          display: 'inline-block',
-          width: '80%',
-        }
-      }, [
-        h('a', {
-          style: {
-            color: 'black'
-          },
-          on: {
-            click: () => { this.changeNodeInfo(root, node, data) }
-          }
-        }, [
-          h('span', data.title)
-        ]),
-        h('span', {
-          style: {
-            display: 'inline-block',
-            float: 'right',
-          }
-        }, )
-      ]);
+    handleSelect(val) {
+      this.nodeData = val[0] ? val[0] : this.nodeData
+      if (!this.nodeData.nodeKey) {
+        this.nodeData.id = null
+      }
+      this.formRight.input5 = this.nodeData.title;
+      this.emitRefresh(this.getOrgStaffs, this.nodeData.id);
     },
     /*获取某个节点orgId的人员*/
     getOrgStaffs(args) {
-      return this.$axios({
-        url: '/staff/getOrgStaffs',
-        method: 'get',
-        params: {
-          id: args[0]
+      return this.$axios.request({
+        url: '/personuser/searchUsers',
+        method: 'post',
+        data: {
+          deptId: args[0]
         },
       }).then(res => {
+        console.log(res.data)
+        this.orgStaffs = res.data
+        this.orgStaffsKeys = this.orgStaffs.map(item => item.userId)
         return res.data
       }).catch(err => {
         console.log(err)
@@ -237,7 +273,7 @@ export default {
       this.nodeData = data;
       let _this = this;
       if (!node.nodeKey) {
-        data.id = -1
+        data.id = null
       }
       this.formRight.input5 = data.title;
       this.emitRefresh(this.getOrgStaffs, data.id);
@@ -271,6 +307,13 @@ export default {
     },
     refreshStaff(data) {
       if (data[0]) {
+        if (data[0].key) {
+          this.getTargetKeys();
+          return
+        }
+        data.sort((a, b) => {
+          return a.userId - b.userId
+        })
         this.staffsData = this.formatSerData(data);
         this.checkStatus();
       } else {
@@ -291,9 +334,9 @@ export default {
       let transMockData = [];
       for (let i in mockData) {
         transMockData[i] = mockData[i];
-        transMockData[i].key = mockData[i].id;
+        transMockData[i].key = mockData[i].userId;
         transMockData[i].label = mockData[i].name;
-        delete transMockData[i].id;
+        delete transMockData[i].userId;
         delete transMockData[i].name;
       }
       return transMockData;
@@ -303,7 +346,7 @@ export default {
       let transMockData = [];
       for (let i in mockData) {
         transMockData[i] = mockData[i];
-        transMockData[i].id = mockData[i].key;
+        transMockData[i].userId = mockData[i].key;
         transMockData[i].name = mockData[i].label;
         delete transMockData[i].key;
         delete transMockData[i].label;
@@ -313,8 +356,9 @@ export default {
     /*未分配列表*/
     getTargetKeys() {
       this.targetKeys.splice(0, this.targetKeys.length);
+      console.log(this.orgStaffsKeys)
       for (var i in this.staffsData) {
-        if (this.staffsData[i].orgId == this.nodeData.id) {
+        if (this.orgStaffsKeys.indexOf(this.staffsData[i].key) !== -1) {
           this.targetKeys.push(this.staffsData[i].key);
         }
       }
@@ -322,22 +366,22 @@ export default {
     },
     /*渲染列表*/
     render1(item) {
+      String.prototype.times = function(n) { return (new Array(n + 1)).join(this); };
       if (item.key == "账号ID") {
         return '&emsp;&emsp;&emsp;&emsp;' + item.key + '&emsp;&emsp;&emsp;&emsp;&emsp;' + item.label;
       } else if (item.key == " 账号ID") {
         return '&emsp;&emsp;&emsp;&nbsp;' + item.key + '&emsp;&emsp;&emsp;&emsp;&emsp;' + item.label;
       }
-      return '&emsp;&emsp;&emsp;&emsp;&emsp;' + item.key + '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;' + item.label;
+      return '&nbsp;'.times(18 - item.key.toString().length) + item.key + '&nbsp;'.times(28 - item.label.toString().length) + item.label;
     },
     /*分配操作*/
     allot(args) {
-      return this.$axios({
-        url: '/staff/allot',
+      return this.$axios.request({
+        url: '/personuser/updateUsers',
         method: 'post',
         data: args[0]
       }).then(res => {
         console.log(res)
-        console.log(this.staffsData)
         return this.staffsData
       }).catch(err => {
         console.log(err)
@@ -348,16 +392,22 @@ export default {
         this.$Message.error(this.formRight.input5 + '无法进行分配操作');
         return;
       }
-      let _this = this;
-      this.staffsData.splice(0, 2)
-      console.log(this.staffsData)
-      // orgid变化
-      for (var i in this.staffsData) {
-        if (moveKeys.indexOf(this.staffsData[i].key) !== -1) {
-          this.staffsData[i].orgId = direction == 'right' ? this.nodeData.id : 1
+      let _this = this,
+        allotDatas = JSON.parse(JSON.stringify(this.staffsData));
+      allotDatas.splice(0, 2)
+      // deptId变化
+      for (var i in allotDatas) {
+        if (moveKeys.indexOf(allotDatas[i].key) !== -1) {
+          allotDatas[i].deptId = direction == 'right' ? this.nodeData.id : 1;
+          this.staffsData[parseInt(i) + 2].deptId = direction == 'right' ? this.nodeData.id : 1
         }
       }
-      let allotDatas = this.formatFrontData(this.staffsData);
+      // orgsStaffKeys变化
+      if (direction == 'right') 
+        this.orgStaffsKeys = this.orgStaffsKeys.concat(moveKeys)
+      else this.orgStaffsKeys = this.orgStaffsKeys.filter(item => moveKeys.indexOf(item) === -1)
+        
+      allotDatas = this.formatFrontData(allotDatas);
       // 需要重新渲染数据
       this.emitRefresh(this.allot, allotDatas);
     },
@@ -365,11 +415,12 @@ export default {
     /*人员查询区*/
     // 根据id查找
     getStaffById(args) {
-      return this.$axios({
-        url: '/staff/getStaffById',
-        method: 'get',
-        params: {
-          id: args[0]
+      return this.$axios.request({
+        url: '/personuser/searchUsers',
+        method: 'post',
+        data: {
+          userId: args[0],
+
         }
       }).then(res => {
         return res.data
@@ -379,26 +430,26 @@ export default {
     },
     // 根据id区间查询
     getStaffByIds(args) {
-      return this.$axios({
-        url: '/staff/getStaffByIds',
-        method: 'get',
-        params: {
+      return this.$axios.request({
+        url: '/personuser/searchUsers',
+        method: 'post',
+        data: {
           start: args[0],
           end: args[1]
         }
       }).then(res => {
-        return res.data
         console.log(res.data)
+        return res.data
       }).catch(err => {
         console.log(err)
       })
     },
     // 根据Name查找
     getStaffByName(args) {
-      return this.$axios({
-        url: '/staff/getStaffByName',
-        method: 'get',
-        params: {
+      return this.$axios.request({
+        url: '/personuser/searchUsers',
+        method: 'post',
+        data: {
           name: args[0],
         }
       }).then(res => {
@@ -458,26 +509,24 @@ export default {
       this.resetCondition();
       this.staffsData = []
     },
-    test() {
-
-    }
   },
   mounted() {
     this.setTitleMapId()
+    this.treeFresh()
   },
   watch: {
     /*表单区*/
     // 表单验证
     formRight: {
       handler(val) {
-        if (/\D+/.test(val.input1)) {
+        if (/\D/.test(val.input1)) {
           this.nanId = true
-        }else{
+        } else {
           this.nanId = false
         }
-        if(/\D+/.test(val.input2)){
+        if (/\D/.test(val.input2)) {
           this.nanIds = true
-        }else{
+        } else {
           this.nanIds = false
         }
       },
@@ -488,13 +537,14 @@ export default {
 
 </script>
 <style scoped>
-.formNumber{
+.formNumber {
   margin-bottom: 0;
   height: 60px;
 }
-.formTip{
+
+.formTip {
   height: 27px;
-  line-height :27px; 
+  line-height: 27px;
   color: red;
 }
 

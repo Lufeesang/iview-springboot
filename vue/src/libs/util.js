@@ -45,6 +45,7 @@ export const getMenuByRouter = (list, access) => {
       if (showThisMenuEle(item, access)) res.push(obj)
     }
   })
+  // console.log(res)
   return res
 }
 
@@ -52,7 +53,7 @@ export const getMenuByRouter = (list, access) => {
  * @param {Array} routeMetched 当前路由metched
  * @returns {Array}
  */
-export const getBreadCrumbList = (routeMetched, homeRoute) => {
+export const getBreadCrumbList = (routeMetched) => {
   let res = routeMetched.filter(item => {
     return item.meta === undefined || !item.meta.hide
   }).map(item => {
@@ -66,7 +67,10 @@ export const getBreadCrumbList = (routeMetched, homeRoute) => {
   res = res.filter(item => {
     return !item.meta.hideInMenu
   })
-  return [Object.assign(homeRoute, { to: homeRoute.path }), ...res]
+  return [{
+    name: 'home',
+    to: '/home'
+  }, ...res]
 }
 
 export const showTitle = (item, vm) => vm.$config.useI18n ? vm.$t(item.name) : ((item.meta && item.meta.title) || item.name)

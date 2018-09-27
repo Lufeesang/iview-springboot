@@ -1,4 +1,4 @@
-import { login, logout, getUserInfo } from '@/api/user'
+import { getUserInfo, login, logout } from './../../api/_user'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -33,12 +33,10 @@ export default {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
         login({
-          userName,
-          password
+          username: userName,
+          password: password
         }).then(res => {
-          const data = res.data
-          commit('setToken', data.token)
-          resolve()
+          resolve(res)
         }).catch(err => {
           reject(err)
         })
@@ -47,7 +45,7 @@ export default {
     // 退出登录
     handleLogOut ({ state, commit }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout().then(() => {
           commit('setToken', '')
           commit('setAccess', [])
           resolve()
@@ -63,11 +61,12 @@ export default {
     // 获取用户相关信息
     getUserInfo ({ state, commit }) {
       return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(res => {
+        getUserInfo().then(res => {
           const data = res.data
           commit('setAvator', data.avator)
           commit('setUserName', data.user_name)
           commit('setUserId', data.user_id)
+          // commit('setAccess', data.access)
           commit('setAccess', data.access)
           resolve(data)
         }).catch(err => {

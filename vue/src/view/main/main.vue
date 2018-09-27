@@ -76,7 +76,16 @@ export default {
       return this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []
     },
     menuList () {
+      // console.log(this.$store)
+      // this.$store.commit('setAccess', [
+      //   1,2
+      // ])
       return this.$store.getters.menuList
+      // return this.$store.getters.menuList(null, null, {
+      //   user: {
+      //     access: []
+      //   }
+      // })
     },
     local () {
       return this.$store.state.app.local
@@ -130,26 +139,26 @@ export default {
     // 设置初始语言
     this.setLocal(this.$i18n.locale)
     // 文档提示
-    this.$Notice.info({
-      title: '想快速上手，去看文档吧',
-      duration: 0,
-      render: (h) => {
-        return h('p', {
-          style: {
-            fontSize: '13px'
-          }
-        }, [
-          '点击',
-          h('a', {
-            attrs: {
-              href: 'https://lison16.github.io/iview-admin-doc/#/',
-              target: '_blank'
-            }
-          }, 'iview-admin2.0文档'),
-          '快速查看'
-        ])
-      }
-    })
+    // this.$Notice.info({
+    //   title: '想快速上手，去看文档吧',
+    //   duration: 0,
+    //   render: (h) => {
+    //     return h('p', {
+    //       style: {
+    //         fontSize: '13px'
+    //       }
+    //     }, [
+    //       '点击',
+    //       h('a', {
+    //         attrs: {
+    //           href: 'https://lison16.github.io/iview-admin-doc/#/',
+    //           target: '_blank'
+    //         }
+    //       }, 'iview-admin2.0文档'),
+    //       '快速查看'
+    //     ])
+    //   }
+    // })
   }
 }
 </script>

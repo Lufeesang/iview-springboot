@@ -1,1 +1,3 @@
 routers.js
+*.js
+*.vue

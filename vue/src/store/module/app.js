@@ -8,11 +8,14 @@ export default {
     local: ''
   },
   getters: {
-    menuList: (state, getters, rootState) => getMenuByRouter(routers, rootState.user.access)
+    menuList: (state, getters, rootState) => {
+      // console.log(rootState)
+      return getMenuByRouter(routers, rootState.user.access)
+    }
   },
   mutations: {
     setBreadCrumb (state, routeMetched) {
-      state.breadCrumbList = getBreadCrumbList(routeMetched, state.homeRoute)
+      state.breadCrumbList = getBreadCrumbList(routeMetched)
     },
     setTagNavList (state, list) {
       if (list) {
